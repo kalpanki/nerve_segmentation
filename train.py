@@ -10,8 +10,8 @@ from keras import backend as K
 
 from data import load_train_data, load_test_data
 
-img_rows = 64
-img_cols = 80
+img_rows = 128
+img_cols = 160
 
 smooth = 1.
 
@@ -108,7 +108,7 @@ def train_and_predict():
     print('-'*30)
     print('Fitting model...')
     print('-'*30)
-    model.fit(imgs_train, imgs_mask_train, batch_size=32, nb_epoch=20, verbose=1, shuffle=True,
+    model.fit(imgs_train, imgs_mask_train, batch_size=32, nb_epoch=50, verbose=1, shuffle=True,
               callbacks=[model_checkpoint])
 
     print('-'*30)
@@ -118,8 +118,10 @@ def train_and_predict():
     imgs_test = preprocess(imgs_test)
 
     imgs_test = imgs_test.astype('float32')
-    imgs_test -= mean
-    imgs_test /= std
+    tst_mean = np.mean(imgs_test)
+    tst_std = np.std(imgs_test)
+    imgs_test -= tst_mean
+    imgs_test /= tst_std
 
     print('-'*30)
     print('Loading saved weights...')
